@@ -1,23 +1,24 @@
 import React, { Component } from "react";
+import { Link } from 'react-router-dom'
 
 class Navbar extends Component {
   render() {
     return (
       <nav>
         <div className="nav-wrapper">
-          <a className="left" href="/" style={{ paddingLeft: "1rem" }}>
+          <Link className="left" to="/" style={{ paddingLeft: "1rem" }}>
             AUTH
-          </a>
+          </Link>
           <ul className="right">
             <li>
-              <a href="">Register</a>
+              <Link to="/user_register">Register</Link>
             </li>
             <li>
-              <a href="">Login</a>
+              <Link to="user_login">Login</Link>
             </li>
 
             <li>
-              <a href="">Logout</a>
+              <a to="">Logout</a>
             </li>
           </ul>
         </div>
