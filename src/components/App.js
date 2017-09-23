@@ -3,26 +3,61 @@ import Navbar from "./Navbar";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 // COMPONENTS
-import Landing from './Landing'
-import Dashboard from './Dashboard'
-import Login from './Login'
-import Register from './Register'
-import NotFound from './NotFound'
+import Landing from "./Landing";
+import Dashboard from "./Dashboard";
+import Login from "./Login";
+import Register from "./Register";
+import NotFound from "./NotFound";
 
 class App extends Component {
+
+  constructor() {
+    super()
+    this.state = {
+      isLoggedin: false
+    }
+  }
+
+  componentDidMount() {
+    const checkUser = localStorage.getItem('userCookie');
+    const authUser = JSON.parse(checkUser)
+    if (authUser) {
+      this.setState({
+        isLoggedin: true
+      })
+    }
+  }
+
   render() {
     return (
       <div>
         <BrowserRouter>
           <div>
-            <Navbar />
+            <Navbar isLoggedin={this.state.isLoggedin} />
             <div className="container">
               <Switch>
-                <Route exact path="/" component={Landing} />
-                <Route exact path="/user_login" component={Login} />
-                <Route exact path="/user_register" component={Register} />
-                <Route exact path="/dashboard" component={Dashboard} />
-                <Route exact path="*" component={NotFound} />
+
+                <Route exact path="/" render={(props) => (
+                  <Landing {...props} isLoggedin={this.state.isLoggedin} />
+                )} />
+
+                <Route exact path="/user_login" render={(props) => (
+                  <Login {...props} isLoggedin={this.state.isLoggedin} />
+                )} />
+
+                <Route exact path="/user_register" render={(props) => (
+                  <Register {...props} isLoggedin={this.state.isLoggedin} />
+                )} />
+
+                <Route exact path="/dashboard" render={(props) => (
+                  <Dashboard {...props} isLoggedin={this.state.isLoggedin} />
+                )} />
+
+                <Route exact path="*"
+                render={(props) => (
+                  <NotFound {...props} isLoggedin={this.state.isLoggedin} />
+                )} />
+                
               </Switch>
             </div>
           </div>
