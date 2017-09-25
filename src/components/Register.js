@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from 'react-router-dom'
+import { toast } from 'materialize-css'
 
 class Register extends Component {
 
@@ -20,7 +21,8 @@ class Register extends Component {
     })
   }
 
-  handleFormSubmit() {
+  handleFormSubmit(e) {
+    e.preventDefault()
     let userData = {
       username: this.state.username,
       password: this.state.password,
@@ -28,10 +30,18 @@ class Register extends Component {
     let userCookie = {
       cookie: `th1sis@k3y${this.state.username}`
     }
-    localStorage.setItem('userData', JSON.stringify(userData))
-    localStorage.setItem('userCookie', JSON.stringify(userCookie))
-    this.props.history.push('/dashboard')
-    window.location.reload()
+
+    if (this.state.username === '' && this.state.password === '' ) {
+      return toast('Username/Password Cannot be blank', 4000)
+    } else if (this.state.password !== this.state.confirmPassword) {
+      return toast('Password Confirmation should match the Password', 4000)
+    } else if ( this.state.username.length <= 6 && this.state.password.length <= 6 ){
+      return toast('Username/Password should be atleast 6 characters.', 4000)
+    } else {
+      localStorage.setItem('userData', JSON.stringify(userData))
+      localStorage.setItem('userCookie', JSON.stringify(userCookie))
+      this.props.history.push('/dashboard')
+    }
   }
 
   render() {
