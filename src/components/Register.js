@@ -63,7 +63,7 @@ class Register extends Component {
       } else {
         localStorage.setItem('registeredUsers', JSON.stringify(newRegUser))
         localStorage.setItem('userCookie', JSON.stringify(userCookie))
-        this.props.history.push('/dashboard')
+        this.context.history.push('/dashboard') 
       }
     }
   }
