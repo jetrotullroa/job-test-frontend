@@ -17,16 +17,26 @@ class Login extends Component {
 
   handleFormSubmit(e) {
     e.preventDefault()
-    const userData = localStorage.getItem('userData')
-    const user = JSON.parse(userData)
+    const usersCollection = localStorage.getItem('registeredUsers')
+    const users = JSON.parse(usersCollection)
     let userCookie = {
       cookie: `th1sis@k3y${this.state.username}`
     }
 
-    if (!userData) {
+    function fetchUser(users, username) {
+      const regUser = users.filter(user => user.username === username)
+      if (!regUser) {
+        return false
+      } else {
+        return regUser[0]
+      }
+    }
+
+    const user = fetchUser(users, this.state.username)
+
+    if (!usersCollection) {
       toast('There is no registered user yet. Please go to Register page and signup for a new account.')
-    } else if ( user.username === this.state.username &&
-         user.password === this.state.password ) {
+    } else if ( user.password === this.state.password ) {
       localStorage.setItem('userCookie', JSON.stringify(userCookie))
       toast('Login Successfully', 4000)
       this.props.history.push('/dashboard')

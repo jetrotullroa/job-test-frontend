@@ -1,6 +1,9 @@
 import React, { Component } from "react";
+import { toast } from 'materialize-css'
+
 
 class Dashboard extends Component {
+
   render() {
     return (
       <div>

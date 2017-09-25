@@ -23,24 +23,48 @@ class Register extends Component {
 
   handleFormSubmit(e) {
     e.preventDefault()
-    let userData = {
-      username: this.state.username,
-      password: this.state.password,
-    }
-    let userCookie = {
-      cookie: `th1sis@k3y${this.state.username}`
-    }
 
     if (this.state.username === '' && this.state.password === '' ) {
       return toast('Username/Password Cannot be blank', 4000)
+    } else if (this.state.password.length < 6){
+      return toast('Password should be atleast 6 characters.', 4000)
     } else if (this.state.password !== this.state.confirmPassword) {
       return toast('Password Confirmation should match the Password', 4000)
-    } else if ( this.state.username.length <= 6 && this.state.password.length <= 6 ){
-      return toast('Username/Password should be atleast 6 characters.', 4000)
     } else {
-      localStorage.setItem('userData', JSON.stringify(userData))
-      localStorage.setItem('userCookie', JSON.stringify(userCookie))
-      this.props.history.push('/dashboard')
+
+      const registeredUsers = localStorage.getItem('registeredUsers')
+      const usersCollection = JSON.parse(registeredUsers)
+
+      const userData = {
+        username: this.state.username,
+        password: this.state.password,
+      }
+
+      let userCookie = {
+        cookie: `th1sis@k3y${this.state.username}`
+      }
+
+      const newRegUser = !registeredUsers ? [userData] : [...usersCollection, userData]
+
+      function dupUser(userReg, username) {
+        if (!userReg) {
+          return false
+        } else {
+          const usernames = userReg.map(user => user.username)
+          return usernames.includes(username)
+        }
+      }
+
+      const checkDupUser = dupUser(usersCollection, userData.username)
+
+      if (checkDupUser) {
+        return toast('Username already taken', 4000)
+        this.props.history.push('/user_register')
+      } else {
+        localStorage.setItem('registeredUsers', JSON.stringify(newRegUser))
+        localStorage.setItem('userCookie', JSON.stringify(userCookie))
+        this.props.history.push('/dashboard')
+      }
     }
   }
 
