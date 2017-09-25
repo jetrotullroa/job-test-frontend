@@ -24,9 +24,9 @@ class Register extends Component {
   handleFormSubmit(e) {
     e.preventDefault()
 
-    if (this.state.username === '' && this.state.password === '' ) {
-      return toast('Username/Password Cannot be blank', 4000)
-    } else if (this.state.password.length < 6){
+    if (this.state.username < 5) {
+      return toast('Username Cannot be blank and should be atleast 6 characters.', 4000)
+    } else if (this.state.password.length < 5){
       return toast('Password should be atleast 6 characters.', 4000)
     } else if (this.state.password !== this.state.confirmPassword) {
       return toast('Password Confirmation should match the Password', 4000)
@@ -58,8 +58,8 @@ class Register extends Component {
       const checkDupUser = dupUser(usersCollection, userData.username)
 
       if (checkDupUser) {
-        return toast('Username already taken', 4000)
         this.props.history.push('/user_register')
+        return toast('Username already taken', 4000)
       } else {
         localStorage.setItem('registeredUsers', JSON.stringify(newRegUser))
         localStorage.setItem('userCookie', JSON.stringify(userCookie))

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Redirect } from 'react-router-dom'
 import { toast } from 'materialize-css'
 
 class Login extends Component {
@@ -36,18 +35,19 @@ class Login extends Component {
 
     if (!usersCollection) {
       toast('There is no registered user yet. Please go to Register page and signup for a new account.')
-    } else if ( user.password === this.state.password ) {
-      localStorage.setItem('userCookie', JSON.stringify(userCookie))
-      toast('Login Successfully', 4000)
-      this.props.history.push('/dashboard')
-    } else {
+    } else if (!user)  {
+      toast('There is no user with that username', 4000)
+    } else if (user.password !== this.state.password) {
       this.setState({
         errors: true
       })
       toast('Invalid Credentials', 4000)
       this.props.history.push('/user_login')
+    } else {
+      localStorage.setItem('userCookie', JSON.stringify(userCookie))
+      toast('Login Successfully', 4000)
+      this.props.history.push('/dashboard')
     }
-
   }
 
   handleFormInput(e) {
